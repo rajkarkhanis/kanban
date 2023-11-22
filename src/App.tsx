@@ -1,9 +1,7 @@
+import KanbanBoard from "./components/KanbanBoard";
+
 function App() {
-    return (
-        <div>
-            <h1 className="text-3xl bold">Hello!</h1>
-        </div>
-    );
+    return <KanbanBoard />;
 }
 
 export default App;
