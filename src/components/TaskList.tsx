@@ -16,6 +16,7 @@ interface TaskListProps {
     tasks: Task[];
     deleteList: CallableFunction;
     addTask: CallableFunction;
+    deleteTask: CallableFunction;
     isOverlay?: boolean;
 }
 
@@ -25,6 +26,7 @@ const TaskList = ({
     isOverlay,
     deleteList,
     addTask,
+    deleteTask,
 }: TaskListProps) => {
     const taskIds = useMemo(() => tasks.map((t) => t.id), [tasks]);
 
@@ -106,7 +108,11 @@ const TaskList = ({
             </div>
             <SortableContext items={taskIds}>
                 {tasks.map((task) => (
-                    <TaskCard key={task.id} task={task} />
+                    <TaskCard
+                        key={task.id}
+                        task={task}
+                        deleteTask={deleteTask}
+                    />
                 ))}
             </SortableContext>
         </div>

@@ -128,6 +128,11 @@ const KanbanBoard = () => {
         setTasks([...tasks, newTask]);
     };
 
+    const handleDeleteTask = (task: Task) => {
+        const newTasks: Task[] = tasks.filter((t) => t.id !== task.id);
+        setTasks(newTasks);
+    };
+
     return (
         <DndContext
             sensors={sensors}
@@ -144,6 +149,7 @@ const KanbanBoard = () => {
                             tasks={tasks.filter((t) => t.listId === list.id)}
                             deleteList={handleDeleteList}
                             addTask={handleAddTask}
+                            deleteTask={handleDeleteTask}
                         />
                     ))}
                 </SortableContext>
@@ -156,7 +162,13 @@ const KanbanBoard = () => {
                 </Button>
             </div>
             <DragOverlay>
-                {activeTask && <TaskCard task={activeTask} isOverlay />}
+                {activeTask && (
+                    <TaskCard
+                        deleteTask={handleDeleteTask}
+                        task={activeTask}
+                        isOverlay
+                    />
+                )}
                 {activeList && (
                     <TaskList
                         isOverlay
@@ -164,6 +176,7 @@ const KanbanBoard = () => {
                         tasks={tasks.filter((t) => t.listId === activeList.id)}
                         deleteList={handleDeleteList}
                         addTask={handleAddTask}
+                        deleteTask={handleDeleteTask}
                     />
                 )}
             </DragOverlay>
