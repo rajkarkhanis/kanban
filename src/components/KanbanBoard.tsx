@@ -86,6 +86,7 @@ const KanbanBoard = () => {
 
     const onDragEnd = (event: DragEndEvent) => {
         setActiveList(null);
+        setActiveTask(null);
         const { active, over } = event;
 
         // if List was not dragged over anything
@@ -112,7 +113,7 @@ const KanbanBoard = () => {
             onDragOver={onDragOver}
             onDragEnd={onDragEnd}
         >
-            <div className="flex gap-4 items-center flex-row justify-center">
+            <div className="flex flex-col items-center w-full min-h-screen bg-stone-50 dark:bg-stone-800 gap-8 lg:flex-row lg:justify-evenly p-8">
                 <SortableContext items={listIds}>
                     {lists.map((list) => (
                         <TaskList

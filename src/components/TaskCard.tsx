@@ -1,5 +1,4 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { Card, CardContent } from "./ui/card";
 import { Task } from "@/lib/types";
 import { CSS } from "@dnd-kit/utilities";
 import { cva } from "class-variance-authority";
@@ -24,17 +23,17 @@ const TaskCard = ({ task, isOverlay }: TaskCardProps) => {
         transform: CSS.Transform.toString(transform),
     };
 
-    const variants = cva("", {
+    const variants = cva("bg-white dark:bg-stone-600 p-4 rounded-lg shadow-md", {
         variants: {
             dragging: {
                 over: "ring-2 ring-orange-200 opacity-30",
-                overlay: "ring-2 ring-orange-400",
+                overlay: "ring-2 ring-orange-400 dark:text-stone-50",
             },
         },
     });
 
     return (
-        <Card
+        <div
             ref={setNodeRef}
             {...attributes}
             {...listeners}
@@ -47,8 +46,8 @@ const TaskCard = ({ task, isOverlay }: TaskCardProps) => {
                     : undefined,
             })}
         >
-            <CardContent>{task.content}</CardContent>
-        </Card>
+            {task.content}
+        </div>
     );
 };
 

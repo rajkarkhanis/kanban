@@ -1,10 +1,10 @@
 import { List, Task } from "@/lib/types";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { useMemo } from "react";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TaskCard from "./TaskCard";
 import { CSS } from "@dnd-kit/utilities";
 import { cva } from "class-variance-authority";
+import { DragHandleDots2Icon } from "@radix-ui/react-icons";
 
 interface TaskListProps {
     list: List;
@@ -30,7 +30,7 @@ const TaskList = ({ list, tasks, isOverlay }: TaskListProps) => {
     };
 
     const variants = cva(
-        "h-[500px] max-h-[500px] w-[350px] max-w-full bg-secondary flex flex-col shrink-0 snap-center",
+        "flex flex-col h-[500px] max-h-[500px] w-[350px] max-w-full overflow-y-auto overflow-x-hidden snap-center bg-stone-100 dark:bg-stone-700 dark:text-stone-50 gap-4 p-4 rounded-lg shadow-md",
         {
             variants: {
                 dragging: {
@@ -43,10 +43,8 @@ const TaskList = ({ list, tasks, isOverlay }: TaskListProps) => {
     );
 
     return (
-        <Card
+        <div
             ref={setNodeRef}
-            {...attributes}
-            {...listeners}
             style={style}
             className={variants({
                 dragging: isOverlay
@@ -56,17 +54,20 @@ const TaskList = ({ list, tasks, isOverlay }: TaskListProps) => {
                     : undefined,
             })}
         >
-            <CardHeader>
-                <CardTitle>{list.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <SortableContext items={taskIds}>
-                    {tasks.map((task) => (
-                        <TaskCard key={task.id} task={task} />
-                    ))}
-                </SortableContext>
-            </CardContent>
-        </Card>
+            <div
+                className="flex items-center gap-4"
+                {...attributes}
+                {...listeners}
+            >
+                <DragHandleDots2Icon />
+                <span className="font-bold text-lg">{list.title}</span>
+            </div>
+            <SortableContext items={taskIds}>
+                {tasks.map((task) => (
+                    <TaskCard key={task.id} task={task} />
+                ))}
+            </SortableContext>
+        </div>
     );
 };
 
