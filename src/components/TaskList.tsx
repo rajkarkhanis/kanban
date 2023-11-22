@@ -30,7 +30,7 @@ const TaskList = ({ list, tasks, isOverlay }: TaskListProps) => {
     };
 
     const variants = cva(
-        "flex flex-col h-[500px] max-h-[500px] w-[350px] max-w-full overflow-y-auto overflow-x-hidden snap-center bg-stone-100 dark:bg-stone-700 dark:text-stone-50 gap-4 p-4 rounded-lg shadow-md",
+        "flex flex-col h-96 w-80 shrink-0 overflow-y-auto snap-center bg-stone-100 dark:bg-stone-700 dark:text-stone-50 gap-4 p-4 rounded-lg shadow-md",
         {
             variants: {
                 dragging: {

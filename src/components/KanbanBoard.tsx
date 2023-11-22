@@ -1,4 +1,4 @@
-import { List, Task, initialLists, initialTasks } from "@/lib/types";
+import { List, Task } from "@/lib/types";
 import {
     DndContext,
     DragEndEvent,
@@ -14,6 +14,9 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useMemo, useState } from "react";
 import TaskList from "./TaskList";
 import TaskCard from "./TaskCard";
+import { Button } from "./ui/button";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { generateRandomId, initialLists, initialTasks } from "@/lib/data";
 
 const KanbanBoard = () => {
     const [tasks, setTasks] = useState(initialTasks);
@@ -26,7 +29,6 @@ const KanbanBoard = () => {
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
     const onDragStart = (event: DragStartEvent) => {
-        console.log(event);
         const currentElement = event.active.data.current;
 
         if (currentElement?.type === "List") {
@@ -41,8 +43,6 @@ const KanbanBoard = () => {
     };
 
     const onDragOver = (event: DragOverEvent) => {
-        console.log(event);
-
         const { active, over } = event;
 
         // Task was not dragged over anything
@@ -60,8 +60,8 @@ const KanbanBoard = () => {
             const overIndex = tasks.findIndex((t) => t.id === over.id);
 
             // if task is being dragged on top of a task from another list
-            if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
-                tasks[activeIndex].columnId = tasks[overIndex].columnId;
+            if (tasks[activeIndex].listId !== tasks[overIndex].listId) {
+                tasks[activeIndex].listId = tasks[overIndex].listId;
                 const newTasks = arrayMove(tasks, activeIndex, overIndex - 1);
                 setTasks(newTasks);
                 return;
@@ -77,7 +77,7 @@ const KanbanBoard = () => {
 
         if (isActiveATask && isOverAList) {
             const activeIndex = tasks.findIndex((t) => t.id === active.id);
-            tasks[activeIndex].columnId = over.id as number;
+            tasks[activeIndex].listId = over.id as string;
             const newTasks = arrayMove(tasks, activeIndex, activeIndex);
             setTasks(newTasks);
             return;
@@ -106,6 +106,14 @@ const KanbanBoard = () => {
         setLists(newLists);
     };
 
+    const handleAddList = () => {
+        const newList: List = {
+            id: generateRandomId(),
+            title: "Untitled",
+        };
+        setLists([...lists, newList]);
+    };
+
     return (
         <DndContext
             sensors={sensors}
@@ -113,16 +121,23 @@ const KanbanBoard = () => {
             onDragOver={onDragOver}
             onDragEnd={onDragEnd}
         >
-            <div className="flex flex-col items-center w-full min-h-screen bg-stone-50 text-stone-900 dark:bg-stone-800 gap-8 lg:flex-row lg:justify-evenly p-8">
+            <div className="flex flex-col items-center lg:items-start min-w-screen min-h-screen overflow-x-auto bg-stone-50 text-stone-900 dark:bg-stone-800 gap-8 lg:flex-row p-8">
                 <SortableContext items={listIds}>
                     {lists.map((list) => (
                         <TaskList
                             key={list.id}
                             list={list}
-                            tasks={tasks.filter((t) => t.columnId === list.id)}
+                            tasks={tasks.filter((t) => t.listId === list.id)}
                         />
                     ))}
                 </SortableContext>
+                <Button
+                    onClick={handleAddList}
+                    className="flex items-center gap-2"
+                >
+                    <PlusIcon />
+                    Add List
+                </Button>
             </div>
             <DragOverlay>
                 {activeTask && <TaskCard task={activeTask} isOverlay />}
@@ -130,9 +145,7 @@ const KanbanBoard = () => {
                     <TaskList
                         isOverlay
                         list={activeList}
-                        tasks={tasks.filter(
-                            (t) => t.columnId === activeList.id
-                        )}
+                        tasks={tasks.filter((t) => t.listId === activeList.id)}
                     />
                 )}
             </DragOverlay>
