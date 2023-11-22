@@ -18,6 +18,7 @@ interface TaskListProps {
     addTask: CallableFunction;
     deleteTask: CallableFunction;
     changeListTitle: CallableFunction;
+    changeTaskContent: CallableFunction;
     isOverlay?: boolean;
 }
 
@@ -29,6 +30,7 @@ const TaskList = ({
     addTask,
     deleteTask,
     changeListTitle,
+    changeTaskContent,
 }: TaskListProps) => {
     const taskIds = useMemo(() => tasks.map((t) => t.id), [tasks]);
 
@@ -134,6 +136,7 @@ const TaskList = ({
                         key={task.id}
                         task={task}
                         deleteTask={deleteTask}
+                        changeTaskContent={changeTaskContent}
                     />
                 ))}
             </SortableContext>

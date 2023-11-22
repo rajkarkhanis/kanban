@@ -9,9 +9,15 @@ interface TaskCardProps {
     task: Task;
     isOverlay?: boolean;
     deleteTask: CallableFunction;
+    changeTaskContent: CallableFunction;
 }
 
-const TaskCard = ({ task, isOverlay, deleteTask }: TaskCardProps) => {
+const TaskCard = ({
+    task,
+    isOverlay,
+    deleteTask,
+    changeTaskContent,
+}: TaskCardProps) => {
     const {
         setNodeRef,
         attributes,
@@ -44,6 +50,7 @@ const TaskCard = ({ task, isOverlay, deleteTask }: TaskCardProps) => {
 
     const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         console.log(event.target.value);
+        changeTaskContent(task, event.target.value);
     };
 
     return (

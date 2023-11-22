@@ -11,7 +11,7 @@ import {
     useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import TaskList from "./TaskList";
 import TaskCard from "./TaskCard";
 import { Button } from "./ui/button";
@@ -27,8 +27,6 @@ const KanbanBoard = () => {
 
     const listIds = useMemo(() => lists.map((c) => c.id), [lists]);
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
-
-    useEffect(() => console.log(lists), [lists]);
 
     const onDragStart = (event: DragStartEvent) => {
         const currentElement = event.active.data.current;
@@ -141,6 +139,12 @@ const KanbanBoard = () => {
         setLists(newLists);
     };
 
+    const handleChangeTaskContent = (task: Task, newContent: string) => {
+        task.content = newContent;
+        const newTasks = tasks.map((t) => (t.id === task.id ? task : t));
+        setTasks(newTasks);
+    };
+
     return (
         <DndContext
             sensors={sensors}
@@ -159,6 +163,7 @@ const KanbanBoard = () => {
                             addTask={handleAddTask}
                             deleteTask={handleDeleteTask}
                             changeListTitle={handleChangeListTitle}
+                            changeTaskContent={handleChangeTaskContent}
                         />
                     ))}
                 </SortableContext>
@@ -174,6 +179,7 @@ const KanbanBoard = () => {
                 {activeTask && (
                     <TaskCard
                         deleteTask={handleDeleteTask}
+                        changeTaskContent={handleChangeTaskContent}
                         task={activeTask}
                         isOverlay
                     />
@@ -187,6 +193,7 @@ const KanbanBoard = () => {
                         addTask={handleAddTask}
                         deleteTask={handleDeleteTask}
                         changeListTitle={handleChangeListTitle}
+                        changeTaskContent={handleChangeTaskContent}
                     />
                 )}
             </DragOverlay>
