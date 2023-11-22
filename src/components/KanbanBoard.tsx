@@ -11,7 +11,7 @@ import {
     useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TaskList from "./TaskList";
 import TaskCard from "./TaskCard";
 import { Button } from "./ui/button";
@@ -19,13 +19,25 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import { generateRandomId, initialLists, initialTasks } from "@/lib/data";
 
 const KanbanBoard = () => {
-    const [tasks, setTasks] = useState(initialTasks);
-    const [lists, setLists] = useState(initialLists);
+    const [tasks, setTasks] = useState(() => {
+        const storedTasks = localStorage.getItem("tasks");
+        return storedTasks ? JSON.parse(storedTasks) : initialTasks;
+    });
+
+    const [lists, setLists] = useState(() => {
+        const storedLists = localStorage.getItem("lists");
+        return storedLists ? JSON.parse(storedLists) : initialLists;
+    });
+
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        localStorage.setItem("lists", JSON.stringify(lists));
+    }, [tasks, lists]);
 
     const [activeList, setActiveList] = useState<List | null>(null);
     const [activeTask, setActiveTask] = useState<Task | null>(null);
 
-    const listIds = useMemo(() => lists.map((c) => c.id), [lists]);
+    const listIds = useMemo(() => lists.map((l: List) => l.id), [lists]);
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
     const onDragStart = (event: DragStartEvent) => {
@@ -56,8 +68,10 @@ const KanbanBoard = () => {
 
         // Switch position of two tasks
         if (isActiveATask && isOverATask) {
-            const activeIndex = tasks.findIndex((t) => t.id === active.id);
-            const overIndex = tasks.findIndex((t) => t.id === over.id);
+            const activeIndex = tasks.findIndex(
+                (t: Task) => t.id === active.id
+            );
+            const overIndex = tasks.findIndex((t: Task) => t.id === over.id);
 
             // if task is being dragged on top of a task from another list
             if (tasks[activeIndex].listId !== tasks[overIndex].listId) {
@@ -76,7 +90,9 @@ const KanbanBoard = () => {
         const isOverAList = over.data.current?.type === "List";
 
         if (isActiveATask && isOverAList) {
-            const activeIndex = tasks.findIndex((t) => t.id === active.id);
+            const activeIndex = tasks.findIndex(
+                (t: Task) => t.id === active.id
+            );
             tasks[activeIndex].listId = over.id as string;
             const newTasks = arrayMove(tasks, activeIndex, activeIndex);
             setTasks(newTasks);
@@ -99,8 +115,8 @@ const KanbanBoard = () => {
         const isActiveAList = active.data.current?.type === "List";
         if (!isActiveAList) return;
 
-        const activeIndex = lists.findIndex((l) => l.id === active.id);
-        const overIndex = lists.findIndex((l) => l.id === over?.id);
+        const activeIndex = lists.findIndex((l: List) => l.id === active.id);
+        const overIndex = lists.findIndex((l: List) => l.id === over?.id);
 
         const newLists = arrayMove(lists, activeIndex, overIndex);
         setLists(newLists);
@@ -115,7 +131,7 @@ const KanbanBoard = () => {
     };
 
     const handleDeleteList = (list: List) => {
-        const newLists: List[] = lists.filter((l) => l.id !== list.id);
+        const newLists: List[] = lists.filter((l: List) => l.id !== list.id);
         setLists(newLists);
     };
 
@@ -129,19 +145,19 @@ const KanbanBoard = () => {
     };
 
     const handleDeleteTask = (task: Task) => {
-        const newTasks: Task[] = tasks.filter((t) => t.id !== task.id);
+        const newTasks: Task[] = tasks.filter((t: Task) => t.id !== task.id);
         setTasks(newTasks);
     };
 
     const handleChangeListTitle = (list: List, newTitle: string) => {
         list.title = newTitle;
-        const newLists = lists.map((l) => (l.id === list.id ? list : l));
+        const newLists = lists.map((l: List) => (l.id === list.id ? list : l));
         setLists(newLists);
     };
 
     const handleChangeTaskContent = (task: Task, newContent: string) => {
         task.content = newContent;
-        const newTasks = tasks.map((t) => (t.id === task.id ? task : t));
+        const newTasks = tasks.map((t: Task) => (t.id === task.id ? task : t));
         setTasks(newTasks);
     };
 
@@ -154,11 +170,13 @@ const KanbanBoard = () => {
         >
             <div className="flex flex-col items-center lg:items-start min-w-screen min-h-screen overflow-x-auto bg-stone-50 text-stone-900 dark:bg-stone-800 gap-8 lg:flex-row p-8">
                 <SortableContext items={listIds}>
-                    {lists.map((list) => (
+                    {lists.map((list: List) => (
                         <TaskList
                             key={list.id}
                             list={list}
-                            tasks={tasks.filter((t) => t.listId === list.id)}
+                            tasks={tasks.filter(
+                                (t: Task) => t.listId === list.id
+                            )}
                             deleteList={handleDeleteList}
                             addTask={handleAddTask}
                             deleteTask={handleDeleteTask}
@@ -188,7 +206,9 @@ const KanbanBoard = () => {
                     <TaskList
                         isOverlay
                         list={activeList}
-                        tasks={tasks.filter((t) => t.listId === activeList.id)}
+                        tasks={tasks.filter(
+                            (t: Task) => t.listId === activeList.id
+                        )}
                         deleteList={handleDeleteList}
                         addTask={handleAddTask}
                         deleteTask={handleDeleteTask}
