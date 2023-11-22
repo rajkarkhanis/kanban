@@ -62,7 +62,7 @@ const TaskList = ({ list, tasks, isOverlay }: TaskListProps) => {
             <CardContent>
                 <SortableContext items={taskIds}>
                     {tasks.map((task) => (
-                        <TaskCard key={task.id} content={task.content} />
+                        <TaskCard key={task.id} task={task} />
                     ))}
                 </SortableContext>
             </CardContent>
