@@ -50,8 +50,8 @@ const TaskList = ({ list, tasks, isOverlay }: TaskListProps) => {
                 dragging: isOverlay
                     ? "overlay"
                     : isDragging
-                    ? "over"
-                    : undefined,
+                        ? "over"
+                        : undefined,
             })}
         >
             <div

@@ -113,7 +113,7 @@ const KanbanBoard = () => {
             onDragOver={onDragOver}
             onDragEnd={onDragEnd}
         >
-            <div className="flex flex-col items-center w-full min-h-screen bg-stone-50 dark:bg-stone-800 gap-8 lg:flex-row lg:justify-evenly p-8">
+            <div className="flex flex-col items-center w-full min-h-screen bg-stone-50 text-stone-900 dark:bg-stone-800 gap-8 lg:flex-row lg:justify-evenly p-8">
                 <SortableContext items={listIds}>
                     {lists.map((list) => (
                         <TaskList
