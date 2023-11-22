@@ -114,6 +114,12 @@ const KanbanBoard = () => {
         setLists([...lists, newList]);
     };
 
+    const handleDeleteList = (list: List) => {
+        console.log(`Will delete list`, list);
+        const newLists: List[] = lists.filter((l) => l.id !== list.id);
+        setLists(newLists);
+    };
+
     return (
         <DndContext
             sensors={sensors}
@@ -128,6 +134,7 @@ const KanbanBoard = () => {
                             key={list.id}
                             list={list}
                             tasks={tasks.filter((t) => t.listId === list.id)}
+                            deleteList={handleDeleteList}
                         />
                     ))}
                 </SortableContext>
@@ -146,6 +153,7 @@ const KanbanBoard = () => {
                         isOverlay
                         list={activeList}
                         tasks={tasks.filter((t) => t.listId === activeList.id)}
+                        deleteList={handleDeleteList}
                     />
                 )}
             </DragOverlay>

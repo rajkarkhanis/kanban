@@ -4,15 +4,17 @@ import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TaskCard from "./TaskCard";
 import { CSS } from "@dnd-kit/utilities";
 import { cva } from "class-variance-authority";
-import { DragHandleDots2Icon } from "@radix-ui/react-icons";
+import { DragHandleDots2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { Button } from "./ui/button";
 
 interface TaskListProps {
     list: List;
     tasks: Task[];
+    deleteList: CallableFunction;
     isOverlay?: boolean;
 }
 
-const TaskList = ({ list, tasks, isOverlay }: TaskListProps) => {
+const TaskList = ({ list, tasks, isOverlay, deleteList }: TaskListProps) => {
     const taskIds = useMemo(() => tasks.map((t) => t.id), [tasks]);
 
     const {
@@ -42,6 +44,10 @@ const TaskList = ({ list, tasks, isOverlay }: TaskListProps) => {
         }
     );
 
+    const onListDelete = () => {
+        deleteList(list);
+    };
+
     return (
         <div
             ref={setNodeRef}
@@ -50,17 +56,27 @@ const TaskList = ({ list, tasks, isOverlay }: TaskListProps) => {
                 dragging: isOverlay
                     ? "overlay"
                     : isDragging
-                        ? "over"
-                        : undefined,
+                    ? "over"
+                    : undefined,
             })}
         >
-            <div
-                className="flex items-center gap-4"
-                {...attributes}
-                {...listeners}
-            >
-                <DragHandleDots2Icon />
-                <span className="font-bold text-lg">{list.title}</span>
+            <div className="flex justify-between group">
+                <div
+                    className="flex items-center gap-4"
+                    {...attributes}
+                    {...listeners}
+                >
+                    <DragHandleDots2Icon />
+                    <span className="font-bold text-lg">{list.title}</span>
+                </div>
+                <Button
+                    onClick={onListDelete}
+                    size={"sm"}
+                    variant={"destructive"}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2"
+                >
+                    <TrashIcon />
+                </Button>
             </div>
             <SortableContext items={taskIds}>
                 {tasks.map((task) => (
