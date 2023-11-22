@@ -17,6 +17,7 @@ interface TaskListProps {
     deleteList: CallableFunction;
     addTask: CallableFunction;
     deleteTask: CallableFunction;
+    changeListTitle: CallableFunction;
     isOverlay?: boolean;
 }
 
@@ -27,6 +28,7 @@ const TaskList = ({
     deleteList,
     addTask,
     deleteTask,
+    changeListTitle,
 }: TaskListProps) => {
     const taskIds = useMemo(() => tasks.map((t) => t.id), [tasks]);
 
@@ -65,6 +67,18 @@ const TaskList = ({
         addTask(list);
     };
 
+    const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        changeListTitle(list, event.target.value);
+    };
+
+    const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === "Enter" || event.key === "Escape") {
+            event.preventDefault();
+            const element = event.target as HTMLTextAreaElement;
+            element.blur();
+        }
+    };
+
     return (
         <div
             ref={setNodeRef}
@@ -85,8 +99,16 @@ const TaskList = ({
                         {...listeners}
                     >
                         <DragHandleDots2Icon />
-                        <span className="font-bold text-lg">{list.title}</span>
                     </div>
+                    <textarea
+                        onChange={onChange}
+                        onKeyDown={onKeyDown}
+                        id={list.id}
+                        defaultValue={list.title}
+                        rows={1}
+                        cols={16}
+                        className="bg-inherit text-inherit resize-none focus:outline-none truncate"
+                    ></textarea>
                     <Button
                         onClick={onTaskAdd}
                         size={"sm"}
