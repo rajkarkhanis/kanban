@@ -4,17 +4,28 @@ import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TaskCard from "./TaskCard";
 import { CSS } from "@dnd-kit/utilities";
 import { cva } from "class-variance-authority";
-import { DragHandleDots2Icon, TrashIcon } from "@radix-ui/react-icons";
+import {
+    DragHandleDots2Icon,
+    PlusIcon,
+    TrashIcon,
+} from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
 
 interface TaskListProps {
     list: List;
     tasks: Task[];
     deleteList: CallableFunction;
+    addTask: CallableFunction;
     isOverlay?: boolean;
 }
 
-const TaskList = ({ list, tasks, isOverlay, deleteList }: TaskListProps) => {
+const TaskList = ({
+    list,
+    tasks,
+    isOverlay,
+    deleteList,
+    addTask,
+}: TaskListProps) => {
     const taskIds = useMemo(() => tasks.map((t) => t.id), [tasks]);
 
     const {
@@ -32,7 +43,7 @@ const TaskList = ({ list, tasks, isOverlay, deleteList }: TaskListProps) => {
     };
 
     const variants = cva(
-        "flex flex-col h-96 w-80 shrink-0 overflow-y-auto snap-center bg-stone-100 dark:bg-stone-700 dark:text-stone-50 gap-4 p-4 rounded-lg shadow-md",
+        "flex flex-col h-[448px] w-96 shrink-0 overflow-y-auto snap-center bg-stone-100 dark:bg-stone-700 dark:text-stone-50 gap-4 p-4 rounded-lg shadow-md",
         {
             variants: {
                 dragging: {
@@ -48,6 +59,10 @@ const TaskList = ({ list, tasks, isOverlay, deleteList }: TaskListProps) => {
         deleteList(list);
     };
 
+    const onTaskAdd = () => {
+        addTask(list);
+    };
+
     return (
         <div
             ref={setNodeRef}
@@ -61,13 +76,24 @@ const TaskList = ({ list, tasks, isOverlay, deleteList }: TaskListProps) => {
             })}
         >
             <div className="flex justify-between group">
-                <div
-                    className="flex items-center gap-4"
-                    {...attributes}
-                    {...listeners}
-                >
-                    <DragHandleDots2Icon />
-                    <span className="font-bold text-lg">{list.title}</span>
+                <div className="flex items-center gap-4">
+                    <div
+                        className="flex items-center gap-4"
+                        {...attributes}
+                        {...listeners}
+                    >
+                        <DragHandleDots2Icon />
+                        <span className="font-bold text-lg">{list.title}</span>
+                    </div>
+                    <Button
+                        onClick={onTaskAdd}
+                        size={"sm"}
+                        variant={"outline"}
+                        className="flex items-center gap-2"
+                    >
+                        <PlusIcon />
+                        Add Task
+                    </Button>
                 </div>
                 <Button
                     onClick={onListDelete}

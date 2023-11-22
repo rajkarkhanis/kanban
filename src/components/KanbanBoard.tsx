@@ -115,9 +115,17 @@ const KanbanBoard = () => {
     };
 
     const handleDeleteList = (list: List) => {
-        console.log(`Will delete list`, list);
         const newLists: List[] = lists.filter((l) => l.id !== list.id);
         setLists(newLists);
+    };
+
+    const handleAddTask = (list: List) => {
+        const newTask: Task = {
+            id: generateRandomId(),
+            listId: list.id,
+            content: "Untitled",
+        };
+        setTasks([...tasks, newTask]);
     };
 
     return (
@@ -135,6 +143,7 @@ const KanbanBoard = () => {
                             list={list}
                             tasks={tasks.filter((t) => t.listId === list.id)}
                             deleteList={handleDeleteList}
+                            addTask={handleAddTask}
                         />
                     ))}
                 </SortableContext>
@@ -154,6 +163,7 @@ const KanbanBoard = () => {
                         list={activeList}
                         tasks={tasks.filter((t) => t.listId === activeList.id)}
                         deleteList={handleDeleteList}
+                        addTask={handleAddTask}
                     />
                 )}
             </DragOverlay>
