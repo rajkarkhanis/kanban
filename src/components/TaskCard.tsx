@@ -4,6 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { cva } from "class-variance-authority";
 import { Button } from "./ui/button";
 import { DragHandleDots2Icon, TrashIcon } from "@radix-ui/react-icons";
+import React from "react";
 
 interface TaskCardProps {
     task: Task;
@@ -53,6 +54,13 @@ const TaskCard = ({
         changeTaskContent(task, event.target.value);
     };
 
+    const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === "Escape") {
+            const element = event.target as HTMLTextAreaElement;
+            element.blur();
+        }
+    };
+
     return (
         <div
             ref={setNodeRef}
@@ -65,17 +73,18 @@ const TaskCard = ({
                     : undefined,
             })}
         >
-            <div className="flex items-center gap-4">
+            <div className="flex items-baseline gap-4">
                 <div {...attributes} {...listeners}>
                     <DragHandleDots2Icon />
                 </div>
                 <textarea
                     onChange={onChange}
+                    onKeyDown={onKeyDown}
                     id={task.id}
                     defaultValue={task.content}
-                    rows={1}
+                    rows={2}
                     cols={28}
-                    className="bg-inherit text-inherit resize-none focus:outline-none truncate"
+                    className="bg-inherit text-inherit resize-none focus:outline-none"
                 ></textarea>
             </div>
             <Button
