@@ -139,7 +139,7 @@ const KanbanBoard = () => {
         const newTask: Task = {
             id: generateRandomId(),
             listId: list.id,
-            content: "Untitled",
+            content: undefined,
         };
         setTasks([...tasks, newTask]);
     };

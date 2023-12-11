@@ -6,5 +6,5 @@ export interface List {
 export interface Task {
     id: string;
     listId: string;
-    content: string;
+    content: string | undefined;
 }

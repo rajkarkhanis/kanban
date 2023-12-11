@@ -78,6 +78,8 @@ const TaskCard = ({
                     <DragHandleDots2Icon />
                 </div>
                 <textarea
+                    placeholder="Untitled"
+                    autoFocus={true}
                     onChange={onChange}
                     onKeyDown={onKeyDown}
                     id={task.id}
