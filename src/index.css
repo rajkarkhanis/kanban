@@ -4,6 +4,8 @@
 
   --dark-primary: rgb(68 64 60);
   --dark-secondary: rgb(120 113 108);
+
+  font-family: "Inter", sans-serif;
 }
 
 @tailwind base;

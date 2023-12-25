@@ -13,15 +13,6 @@ export const theme = {
       "2xl": "1400px",
     },
   },
-  fontFamily: {
-    sans: [
-      '"Inter var", sans-serif',
-      {
-        fontFeatureSettings: '"cv11", "ss01"',
-        fontVariationSettings: '"opsz" 32',
-      },
-    ],
-  },
   extend: {
     keyframes: {
       "accordion-down": {
