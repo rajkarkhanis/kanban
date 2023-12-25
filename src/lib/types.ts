@@ -1,10 +1,10 @@
 export interface List {
-    id: string;
-    title: string;
+  id: string;
+  title: string;
 }
 
 export interface Task {
-    id: string;
-    listId: string;
-    content: string | undefined;
+  id: string;
+  listId: string;
+  content: string | undefined;
 }
