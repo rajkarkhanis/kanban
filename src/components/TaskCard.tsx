@@ -80,7 +80,7 @@ const TaskCard = ({
           onKeyDown={onKeyDown}
           id={task.id}
           defaultValue={task.content}
-          rows={2}
+          rows={3}
           cols={28}
           className="bg-inherit text-inherit resize-none focus:outline-none"
         ></textarea>
