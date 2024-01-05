@@ -81,7 +81,7 @@ const TaskCard = ({
           id={task.id}
           defaultValue={task.content}
           rows={3}
-          cols={28}
+          cols={25}
           className="bg-inherit text-inherit resize-none focus:outline-none"
         ></textarea>
       </div>
