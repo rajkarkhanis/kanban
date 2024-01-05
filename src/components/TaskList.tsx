@@ -49,7 +49,7 @@ const TaskList = ({
   };
 
   const variants = cva(
-    "flex flex-col h-[448px] w-96 shrink-0 overflow-y-auto snap-center bg-stone-100 dark:bg-stone-700 dark:text-stone-50 gap-4 p-4 rounded-lg shadow-md",
+    "flex flex-col h-[448px] w-96 shrink-0 overflow-y-auto snap-center bg-neutral-100 dark:bg-neutral-700 dark:text-neutral-50 gap-4 p-4 rounded-lg shadow-md",
     {
       variants: {
         dragging: {

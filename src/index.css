@@ -1,9 +1,9 @@
 :root {
-  --primary: rgb(245 245 244);
-  --secondary: rgb(231 229 228);
+  --primary-scrollbar: rgb(245 245 244);
+  --secondary-scrollbar: rgb(229 229 229);
 
-  --dark-primary: rgb(68 64 60);
-  --dark-secondary: rgb(120 113 108);
+  --dark-primary-scrollbar: rgb(64 64 64);
+  --dark-secondary-scrollbar: rgb(115 115 115);
 
   font-family: "Inter", sans-serif;
 }
@@ -13,7 +13,7 @@
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--secondary) var(--primary);
+  scrollbar-color: var(--secondary-scrollbar) var(--primary-scrollbar);
 }
 
 /* Chrome, Edge, and Safari */
@@ -22,21 +22,21 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--primary);
+  background: var(--primary-scrollbar);
   border-radius: 5px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--secondary);
+  background-color: var(--secondary-scrollbar);
   border-radius: 14px;
-  border: 3px solid var(--primary);
+  border: 3px solid var(--primary-scrollbar);
 }
 
 @media (prefers-color-scheme: dark) {
   /* Firefox */
   * {
     scrollbar-width: thin;
-    scrollbar-color: var(--dark-secondary) var(--dark-primary);
+    scrollbar-color: var(--dark-secondary-scrollbar) var(--dark-primary-scrollbar);
   }
 
   /* Chrome, Edge, and Safari */
@@ -45,14 +45,14 @@
   }
 
   *::-webkit-scrollbar-track {
-    background: var(--dark-primary);
+    background: var(--dark-primary-scrollbar);
     border-radius: 5px;
   }
 
   *::-webkit-scrollbar-thumb {
-    background-color: var(--dark-secondary);
+    background-color: var(--dark-secondary-scrollbar);
     border-radius: 14px;
-    border: 3px solid var(--dark-primary);
+    border: 3px solid var(--dark-primary-scrollbar);
   }
 }
 

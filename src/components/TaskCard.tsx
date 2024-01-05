@@ -34,12 +34,12 @@ const TaskCard = ({
   };
 
   const variants = cva(
-    "flex items-center justify-between bg-slate-50 dark:bg-stone-600 rounded-lg p-4 shadow-md group",
+    "flex items-center justify-between bg-slate-50 dark:bg-neutral-600 rounded-lg p-4 shadow-md group",
     {
       variants: {
         dragging: {
           over: "ring-2 ring-orange-200 opacity-30",
-          overlay: "ring-2 ring-orange-400 dark:text-stone-50",
+          overlay: "ring-2 ring-orange-400 dark:text-neutral-50",
         },
       },
     }
