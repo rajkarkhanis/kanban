@@ -6,9 +6,15 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv" // For loading environment variables
-	_ "github.com/lib/pq"      // PostgreSQL driver
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
+
+type User struct {
+	ID           int64  `json:"id"`
+	Email        string `json:"email"`
+	PasswordHash string `json:"password_hash"`
+}
 
 var DB *sql.DB
 
@@ -50,4 +56,51 @@ func InitDB() {
 	}
 
 	log.Println("Connected to the database successfully!")
+}
+
+func GetUserByEmail(email string) (*User, error) {
+	query := `SELECT id, email, password_hash FROM users WHERE email = $1`
+	row := DB.QueryRow(query, email)
+
+	var user User
+	err := row.Scan(&user.ID, &user.Email, &user.PasswordHash)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("User not found")
+		}
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func CreateUser(email, hashedPassword string) (int64, error) {
+	// Start a transaction
+	tx, err := DB.Begin()
+	if err != nil {
+		return 0, fmt.Errorf("failed to create database transaction: %w", err)
+	}
+
+	// Ensure the transaction is rolled back in case of a panic
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	var userID int64
+	// Insert the user into the database and retrieve the ID
+	query := "INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id"
+	err = tx.QueryRow(query, email, hashedPassword).Scan(&userID)
+	if err != nil {
+		tx.Rollback()
+		return 0, fmt.Errorf("failed to create user: %w", err)
+	}
+
+	// Commit the transaction
+	if err := tx.Commit(); err != nil {
+		return 0, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+
+	return userID, nil
 }
